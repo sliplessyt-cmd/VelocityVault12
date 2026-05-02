@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Hub</title>
+<style>
+body { font-family: Arial; margin: 0; background: #111; color: white; }
+.container { padding: 20px; }
+input { padding: 10px; margin: 5px; }
+button { padding: 10px; cursor: pointer; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 15px; }
+.card { background: #222; padding: 10px; border-radius: 10px; cursor: pointer; }
+.card img { width: 100%; border-radius: 10px; }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div id="auth" class="container">
+<h2>Login / Sign Up</h2>
+<input id="username" placeholder="Username"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<button onclick="login()">Enter</button>
+</div>
+
+<div id="site" class="hidden container">
+<h1>Car Hub</h1>
+<div id="cars" class="grid"></div>
+<div id="details" class="hidden"></div>
+</div>
+
+<script>
+const users = {};
+
+function login(){
+ const u = document.getElementById('username').value;
+ const p = document.getElementById('password').value;
+ if(!users[u]) users[u] = p;
+ if(users[u] === p){
+  document.getElementById('auth').classList.add('hidden');
+  document.getElementById('site').classList.remove('hidden');
+  loadCars();
+ } else {
+  alert('Wrong password');
+ }
+}
+
+const carData = [
+ {name:"Nissan GT-R R34", img:"https://source.unsplash.com/400x300/?gtr", info:"0-60: 5.0s | Weight: 1540kg"},
+ {name:"Lamborghini Aventador", img:"https://source.unsplash.com/400x300/?lamborghini", info:"0-60: 2.9s | Weight: 1575kg"},
+ {name:"Bugatti Chiron", img:"https://source.unsplash.com/400x300/?bugatti", info:"0-60: 2.4s | Weight: 1995kg"},
+ {name:"Ferrari 488", img:"https://source.unsplash.com/400x300/?ferrari", info:"0-60: 3.0s | Weight: 1475kg"},
+ {name:"McLaren P1", img:"https://source.unsplash.com/400x300/?mclaren", info:"0-60: 2.7s | Weight: 1490kg"},
+ {name:"Koenigsegg Jesko", img:"https://source.unsplash.com/400x300/?koenigsegg", info:"0-60: 2.5s | Weight: 1420kg"},
+ {name:"Porsche 911 Turbo S", img:"https://source.unsplash.com/400x300/?porsche", info:"0-60: 2.6s | Weight: 1640kg"},
+ {name:"Tesla Model S Plaid", img:"https://source.unsplash.com/400x300/?tesla", info:"0-60: 2.1s | Weight: 2162kg"},
+ {name:"BMW M4", img:"https://source.unsplash.com/400x300/?bmw", info:"0-60: 3.8s | Weight: 1725kg"},
+ {name:"Audi R8", img:"https://source.unsplash.com/400x300/?audi", info:"0-60: 3.2s | Weight: 1595kg"}
+];
+
+function loadCars(){
+ const container = document.getElementById('cars');
+ container.innerHTML = '';
+ carData.forEach((car, index) => {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML = `<img src="${car.img}"><h3>${car.name}</h3>`;
+  div.onclick = () => showDetails(index);
+  container.appendChild(div);
+ });
+}
+
+function showDetails(i){
+ const car = carData[i];
+ const d = document.getElementById('details');
+ d.classList.remove('hidden');
+ d.innerHTML = `
+  <h2>${car.name}</h2>
+  <img src="${car.img}" style="width:300px">
+  <p>${car.info}</p>
+  <button onclick="d.classList.add('hidden')">Close</button>
+ `;
+}
+</script>
+
+</body>
+</html>
